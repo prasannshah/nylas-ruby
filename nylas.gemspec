@@ -1,14 +1,5 @@
 # encoding: utf-8
 
-require 'rubygems'
-require 'bundler'
-begin
-  Bundler.setup(:default, :development)
-rescue Bundler::BundlerError => e
-  $stderr.puts e.message
-  $stderr.puts "Run `bundle install` to install missing gems"
-  exit e.status_code
-end
 require './lib/version.rb'
 
 Gem::Specification.new do |gem|
@@ -23,13 +14,8 @@ Gem::Specification.new do |gem|
   gem.files = Dir.glob('lib/**/*.rb')
   gem.platform = 'java' if RUBY_PLATFORM[/java/] == 'java'
   gem.dependencies.clear
-  bundler = Bundler.load
-  bundler.dependencies.select {|d| ([:default, :runtime] & d.groups ).any? }.each do |dependency|
-    next unless dependency.current_platform?
-    gem.add_runtime_dependency dependency.name, *dependency.requirement.as_list
-  end
-  bundler.dependencies.select { |d| ([:development, :test] & d.groups).any? }.each do |dependency|
-    next unless dependency.current_platform?
-    gem.add_development_dependency dependency.name, *dependency.requirement.as_list
-  end
+  gem.add_runtime_dependency 'rest-client', '~> 1.8'
+  gem.add_runtime_dependency 'yajl-ruby', '~> 1.3'
+  gem.add_runtime_dependency 'em-http-request', '~> 1.1'
+
 end
